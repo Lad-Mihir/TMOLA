@@ -1,0 +1,144 @@
+.tab {
+    float: left;
+    /* border: 1px solid #ccc;
+    background-color: #f1f1f1; */
+    width: 15%;
+    height: 300px;
+}
+.login {
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+form.login_form {
+    border: 3px solid #f1f1f1;
+    padding: 20px;
+}
+/* Style the buttons inside the tab */
+.tab button {
+    display: block;
+    background-color: white;
+    color: black;
+    padding: 22px 30px;
+    width: 100%;
+    border: none;
+    border-radius: 20% 0 0 20%;
+    outline: none;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 17px;
+    box-shadow: inset 6px 6px 10px 0 #172352;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current "tab button" class */
+.tab button.active {
+    background-color: white;
+    box-shadow: none;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 30px 6px 250px;
+    box-shadow: 6px 6px 10px 0 black;
+    /* padding-left: 150px; */
+}
+
+form.login_form {
+    border: 3px solid #f1f1f1;
+}
+
+.login_form input[type=text],
+.login_form input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button.login_submit {
+    background-color: #172352;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button.login_submit:hover {
+    opacity: 0.8;
+}
+
+table {
+    text-align: left;
+    padding: 10px;
+    border-spacing: 10px;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+table th {
+    padding: 3px;
+    margin: 2px;
+    vertical-align: top;
+    text-align: center;
+    /* border: 2px solid black;
+            border-collapse: collapse; */
+}
+
+table td {
+    width: fit-content;
+    padding: 3px 10px 3px 10px;
+    margin: 2px;
+    /* border: 2px solid black;
+            border-collapse: collapse; */
+    text-align: left;
+}
+.clearfix_button {
+    border: black 1PX SOLID;
+    padding: 5px 8px;
+    background-color: #172352;
+}
+.clearfix_button a {
+    color: white;
+    text-decoration: none;
+}
+.clearfix_button:hover {
+   opacity: 50%;
+}
+
+/* Create an active/current "tab button" class */
+.clearfix_button.active {
+    background-color: white;
+    box-shadow: none;
+}
+
+@media screen and (max-width: 800px) {
+    .tabcontent {
+        padding: 6px 5px 6px 150px;
+        box-shadow: 6px 6px 10px 0 black;
+        /* padding-left: 150px; */
+        width: max-content;
+    }
+    button.login_submit {
+        text-align: left;
+        width: fit-content;
+    }
+    
+}

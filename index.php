@@ -1,3 +1,48 @@
+<?php
+require("dbcont.php");
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
+
+if(isset($_GET['submit'])) {
+  $d= $_GET['undersearch'];
+  header("Location:filterproductlist.php?d=$d");
+}
+//geeting the product ids which are opt for the advertisement purpose.
+
+$sql = "SELECT productId FROM product_master where Adv='Yes';";
+$id = mysqli_query($conn, $sql);
+if (mysqli_num_rows($id) > 0) {
+  //create an empty array to store the column values
+  $pid = array();
+  //loop through the result set and store the column values in the array
+  while ($row = mysqli_fetch_assoc($id)) {
+    $pid[] = $row['productId'];
+  }
+}
+
+function product_card($id)
+{
+  $conn = mysqli_connect(Server, Username, Password, DatabaseName);
+  $sql = "select * from product_master where productId=$id ";
+  $result = mysqli_query($conn, $sql);
+  $product = mysqli_fetch_assoc($result);
+  $dbproductId = $product["productId"];
+  $dbcategoryId = $product["categoryId"];
+  $dbdiscountId = $product["discountId"];
+  $dproductName = $product["productName"];
+  $dbproductPrice = $product["productPrice"];
+  $dbdiscountPrice = $product["discountPrice"];
+  $dbproductQuantity = $product["productQuantity"];
+  $dbproductImage = $product["ProductImages1"];
+  $dbproductshort = $product["productShortDes"];
+  $dbproductModel = $product["productModel"];
+  $pro_detail = array($dbproductId, $dbcategoryId, $dbdiscountId, $dproductName, $dbproductPrice, $dbdiscountPrice, $dbproductQuantity, $dbproductImage, $dbproductshort, $dbproductModel);
+  return $pro_detail;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +51,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TMOLA- Home</title>
-  <link href="Main.css" rel="stylesheet">
+  <link href="main.css" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="Assets/Favicon.png">
 </head>
 
@@ -52,85 +97,38 @@
       </div>
     </div>
     <!-- Deal photo show-->
-    <section class="photo_grid">
-      <div class="row">
-        <div class="column">
-          <div class="pro_card">
-            <img src="Assets/Homepage/3.jpg" style="width:100%; height:40%">
-            <div class="deal_text">
-              <span class="name">Item name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="old_price">Price</span><br>
-              <span class="model_name">Model name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dis_price">Price2</span>
-            </div>
-          </div>
-          <div class="pro_card">
-            <img src="Assets/Homepage/1.jpg" style="width:100%; height:20%">
-            <div class="deal_text">
-              <span class="name">Item name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="old_price">Price</span><br>
-              <span class="model_name">Model name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dis_price">Price2</span>
-            </div>
-          </div>
-          <div class="pro_card">
-            <img src="Assets/Homepage/2.jpg" style="width:100%; height:30%">
-            <div class="deal_text">
-              <span class="name">Item name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="old_price">Price</span><br>
-              <span class="model_name">Model name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dis_price">Price2</span>
-            </div>
+    <section class="gallry">
+      <?php 
+      foreach ($pid as $id) {
+        $n = product_card($id);
+      ?>
+      <div class="pro_card">
+      <a href="productdetail.php?pid=<?php echo $n[0];?>">
+        <img src="<?php 
+    echo $n[7];?>" alt="<?php
+    echo $n[3];?>" style="width:100%; height:100%">
+        <div class="deal_text">
+          <div class="name"><?php 
+    echo $n[3];?></div>
+          <div class="price">
+            <span class="old_price"><?php 
+    echo $n[5];?></span>
+            <span class="dis_price"><?php 
+    echo $n[4];?></span>
           </div>
         </div>
-        <div class="column">
-          <div class="pro_card">
-            <img src="Assets/Homepage/4.jpg" style="width:100%; height:25%">
-            <div class="deal_text">
-              <span class="name">Item name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="old_price">Price</span><br>
-              <span class="model_name">Model name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dis_price">Price2</span>
-            </div>
-          </div>
-          <div class="pro_card">
-            <img src="Assets/Homepage/1.jpg" style="width:100%; height:30%">
-            <div class="deal_text">
-              <span class="name">Item name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="old_price">Price</span><br>
-              <span class="model_name">Model name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dis_price">Price2</span>
-            </div>
-          </div>
-          <div class="pro_card">
-            <img src="Assets/Homepage/5.jpg" style="width:100%; height:35%">
-            <div class="deal_text">
-              <span class="name">Item name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="old_price">Price</span><br>
-              <span class="model_name">Model name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dis_price">Price2</span>
-            </div>
-          </div>
-        </div>
-        <div class="column">
-          <div class="pro_card">
-            <img src="Assets/Homepage/6.jpg" style="width:100%; height:35%">
-            <div class="deal_text">
-              <span class="name">Item name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="old_price">Price</span><br>
-              <span class="model_name">Model name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dis_price">Price2</span>
-            </div>
-          </div>
-          <div class="pro_card">
-            <img src="Assets/Homepage/7.jpg" style="width:100%; height:30%">
-            <div class="deal_text">
-              <span class="name">Item name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="old_price">Price</span><br>
-              <span class="model_name">Model name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dis_price">Price2</span>
-            </div>
-          </div>
-          <div class="pro_card">
-            <img src="Assets/Homepage/1.jpg" style="width:100%; height:25%">
-            <div class="deal_text">
-              <span class="name">Item name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="old_price">Price</span><br>
-              <span class="model_name">Model name</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dis_price">Price2</span>
-            </div>
-          </div>
-        </div>
+      </a>
       </div>
+      <?php  }
+      ?>
     </section>
     <div class="button_div">
-      <button class="button">View all Products</button>
+      <a href="productlist.php">
+      <button class="button">View all Products</button></a>
     </div>
     <section class="Product_dis">
       <div class="dis1">
-        <a href="productlist.php">
+        <a href="filterproductlist.php?a=101">
           <img src="Assets/Homepage/7.jpg"><br>
           <div class="dis_button1">
             <strong>Mobiles</strong>
@@ -138,16 +136,16 @@
         </a>
       </div>
       <div class="dis2">
-        <a href="productlist.php">
-          <img src="Assets/Homepage/8.jpg"><br>
+        <a href="filterproductlist.php?a=100">
+          <img src="Assets/Homepage/4.jpg"><br>
           <div class="dis_button1">
             <strong>Televisons</strong>
           </div>
         </a>
       </div>
       <div class="dis3">
-        <a href="productlist.php">
-          <img src="Assets/Homepage/7.jpg"><br>
+        <a href="filterproductlist.php?a=102">
+          <img src="Assets/Homepage/2.jpg"><br>
           <div class="dis_button1">
             <strong>Laptops</strong>
           </div>
@@ -155,7 +153,7 @@
       </div>
     </section>
   </section>
-  
+
 
   <script>
     let slideIndex = 1;
@@ -191,8 +189,9 @@
   </script>
 </body>
 <footer>
-<?php
+  <?php
   include('footer.php');
   ?>
 </footer>
+
 </html>

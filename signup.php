@@ -1,31 +1,10 @@
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TMOLA- SignUp</title>
-  <link href="Main.css" rel="stylesheet">
-  <link rel="icon" type="image/x-icon" href="Assets/Favicon.png">
-</head>
-
-<body>
-  <!-- the header part -->
-  <header>
-    <?php
-    include('header.php');
-    ?>
-  </header>
-  <div class="hor_ad">
-    <img src="Assets/Homepage/1.jpg" style="width:100%; height:200px">
-  </div>
-  <div class="login">
-    <h2>Sign Up</h2>
-    <?php
-require("DBcont.php");
+<?php
+require("dbcont.php");
+if (session_status() == PHP_SESSION_NONE) {
+  session_start();
+}
 $Error = [];
+$message = "";
 if (isset($_POST['submit'])) {
   //define variable to the input names
   $Fname = $_POST['Fname'];
@@ -41,8 +20,8 @@ if (isset($_POST['submit'])) {
 
   //validation and sanitization of the data.
   if (!empty($Fname)) {
-    if (preg_match('/^[a-zA-Z]+$/', $Fname)) {
-      $name = mysqli_real_escape_string($conn, trim($Fname));
+    if (preg_match('/^[a-zA-Z\s]+$/', $Fname)) {
+      $Fname = mysqli_real_escape_string($conn, trim($Fname));
     } else {
       array_push($Error, "Please enter vaild name.<br>");
     }
@@ -51,7 +30,7 @@ if (isset($_POST['submit'])) {
   }
   if (!empty($Lname)) {
     if (preg_match('/^[a-zA-Z]+$/', $Lname)) {
-      $name = mysqli_real_escape_string($conn, trim($Lname));
+      $Lname = mysqli_real_escape_string($conn, trim($Lname));
     } else {
       array_push($Error, "Please enter vaild name.<br>");
     }
@@ -113,14 +92,14 @@ if (isset($_POST['submit'])) {
   if (!empty($Uname)) {
     if (preg_match('/^[\w]+/', $Uname)) {
       $Uname = mysqli_real_escape_string($conn, trim($Uname));
-      $sql = "SELECT * FROM user_master where userName = '$Uname'";  
-      $result = mysqli_query($conn, $sql);  
-      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);  
-      $count = mysqli_num_rows($result);
-      $Fname = "SELECT userFname FROM user_master where userName = '$Uname';";
+      $usql = "SELECT * FROM user_master where userName = '$Uname'";  
+      $uresult = mysqli_query($conn, $usql);  
+      $urow = mysqli_fetch_array($uresult, MYSQLI_ASSOC);  
+      $ucount = mysqli_num_rows($uresult);
+      // $uFname = "SELECT userFname FROM user_master where userName = '$Uname';";
       // session_start();
       //     $_SESSION['Fname'] = $Fname;
-      if($count == 1){  
+      if($ucount == 1){  
         array_push($Error,"You already have an account! Please <a href='SignIn.php'>Sign In</a><br>");
       } 
     } else {
@@ -131,7 +110,7 @@ if (isset($_POST['submit'])) {
   }
   if (!empty($psw)) {
     if ($psw == $rpsw) {
-      $psw = mysqli_real_escape_string($conn, trim($psw));
+      $psw = password_hash(mysqli_real_escape_string($conn, trim($psw)),PASSWORD_DEFAULT);
     } else {
       array_push($Error, "Password is not matcing with repeat password.<br>");
     }
@@ -142,7 +121,7 @@ if (isset($_POST['submit'])) {
   if (!empty($Error)) {
     foreach ($Error as $error) {
       // echo "<script>alert('ohh! Error in signup. Please try again.');<script>";
-      echo $error;
+      $message = $error;
     }
   } else {
     //inserting the values to the DB.
@@ -151,23 +130,47 @@ if (isset($_POST['submit'])) {
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, 'sssssssss', $Uname, $psw, $Fname, $Lname, $phoneno, $email, $address, $State, $Pincode);
     $result = mysqli_stmt_execute($stmt);
-
-    if (mysqli_query($conn, $result)) {
-      echo $Fname .",You have sign up sucessfully!";
+  
+    if ($result == 1) {
+      $message= $Fname .",You have sign up sucessfully!";
     } else {
-      echo "ohh! Error in signup. Please try again.";
+      $message ="ohh! Error in signup. Please try again.";
     }
-    // session_start();
-    // $_SESSION['name'] = $Name; 
-    // header('Location:bookings.php');
+    
   }
 }
 ?>
-    <form action="Signup.php" style="border:1px solid #ccc" class="login_form" method="POST">
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMOLA- SignUp</title>
+  <link href="main.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="Assets/Favicon.png">
+</head>
+
+<body>
+  <!-- the header part -->
+  <header>
+    <?php
+    include('header.php');
+    ?>
+  </header>
+  <div class="hor_ad">
+    <img src="Assets/Homepage/9.jpg" style="width:100%; height:200px">
+  </div>
+  <div class="login">
+    <span style="color=red;"><?php echo $message; ?></span>
+    <h2>Sign Up</h2>
+    
+    <form action="signup.php" style="border:1px solid #ccc" class="login_form" method="POST">
       <div class="container_SI">
 
         <p>Please fill in this form to create an account.</p>
-        <p>Already have an account? Click here for <a href="SignIn.php">Sign In.</a> </p>
+        <p>Already have an account? Click here for <a href="signin.php">Sign In.</a> </p>
         <hr>
 
         <label for="Fname"><b>First Name</b></label>
@@ -177,10 +180,10 @@ if (isset($_POST['submit'])) {
         <input type="text" placeholder="Enter Last Name" name="Lname">
 
         <label for="email"><b>Email</b></label>
-        <input type="text" placeholder="Enter Email" name="email">
+        <input type="text" placeholder="someone@somthing.com" name="email">
 
         <label for="phoneno"><b>Phone Number</b></label>
-        <input type="text" placeholder="Enter Phone No" name="phoneno">
+        <input type="text" placeholder="(123) 456-7890" name="phoneno">
 
         <label for="Address"><b>Address</b></label>
         <input type="text" placeholder="Enter Address" name="Address">

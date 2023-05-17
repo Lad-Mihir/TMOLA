@@ -1,6 +1,6 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="Main.css" rel="stylesheet">
+    <link href="main.css" rel="stylesheet">
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 </head>
 <div class="Footer">
@@ -8,15 +8,15 @@
     <div class="main_links">
         <a href="index.php">Home</a><br>
         <a href="product.php">Product</a><br>
-        <a href="Cart.php">My Cart</a><br>
-        <a href="Profile.php">Profile</a>
+        <a href="cart.php">My Cart</a><br>
+        <a href="profile.php">Profile</a>
     </div>
     <div class="extra_links">
-        <a href="AboutUs.php">About Us</a><br>
-        <a href="ContactUs.php">Contact Us</a><br>
-        <a href="TC.php">Terms and Conditions</a><br>
-        <a href="PrivacyPolicy.php">Privacy Policy</a><br>
-        <a href="ReturnPolicy.php">Return Policy</a>
+        <a href="aboutus.php">About Us</a><br>
+        <a href="contactus.php">Contact Us</a><br>
+        <a href="tc.php">Terms and Conditions</a><br>
+        <a href="privacypolicy.php">Privacy Policy</a><br>
+        <a href="returnpolicy.php">Return Policy</a>
     </div>
     <div class="contact">
         Have Any Question?
